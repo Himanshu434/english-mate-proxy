@@ -72,11 +72,12 @@ const openaiResp = await fetch("https://api.groq.com/openai/v1/chat/completions"
     "Authorization": `Bearer ${OPENAI_KEY}`
   },
   body: JSON.stringify({
-    model: "llama3-70b-8192",   // or another Groq-supported model
-    messages: payloadMessages,
-    max_tokens,
-    temperature
-  })
+  model: "llama-3.1-70b-versatile",   // ✅ updated Groq model
+  messages: payloadMessages,
+  max_tokens,
+  temperature
+})
+
 });
 
 
