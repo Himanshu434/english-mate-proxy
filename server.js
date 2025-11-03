@@ -64,19 +64,21 @@ app.post("/api/chat", checkSecret, async (req, res) => {
     else return res.status(400).json({ error: "Request must include messages[] or prompt string" });
 
     // Use built-in fetch (Node 18+)
-    const openaiResp = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${OPENAI_KEY}`,
-      },
-      body: JSON.stringify({
-        model,
-        messages: payloadMessages,
-        max_tokens,
-        temperature,
-      }),
-    });
+    // Forward to Groq (OpenAI-compatible endpoint)
+const openaiResp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${OPENAI_KEY}`
+  },
+  body: JSON.stringify({
+    model: "llama3-70b-8192",   // or another Groq-supported model
+    messages: payloadMessages,
+    max_tokens,
+    temperature
+  })
+});
+
 
     const data = await openaiResp.json();
     if (!openaiResp.ok) return res.status(openaiResp.status).json(data);
